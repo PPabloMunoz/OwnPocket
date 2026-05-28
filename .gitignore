@@ -1,0 +1,84 @@
+# ========================================
+# Go / Backend
+# ========================================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go workspace
+go.work
+go.work.sum
+
+# Dependency directories
+vendor/
+
+# Binary output
+*.bin
+main
+app
+finance-app
+*.test
+
+# Build cache
+*.o
+*.a
+
+# ========================================
+# Frontend (Vite + React)
+# ========================================
+node_modules/
+dist/
+build/
+.vite/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ========================================
+# Project Specific
+# ========================================
+# Database
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+*.db
+*.sqlite
+*.sqlite3
+
+# Backups
+*.bak
+*.backup
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Coverage
+coverage.out
+coverage.html
+
+# Optional: If you use Docker
+*.dockerenv
+
