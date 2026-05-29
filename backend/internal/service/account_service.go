@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/ppablomunoz/ownpocket/backend/internal/model"
+	"gorm.io/gorm"
 )
 
 func (s *Service) CreateAccount(
@@ -55,5 +56,11 @@ func (s *Service) UpdateAccount(userID, accountID uint, updates map[string]any) 
 
 func (s *Service) DeleteAccount(userID, accountID uint) error {
 	result := s.db.Where("user_id = ? AND id = ?", userID, accountID).Delete(&model.Account{})
-	return result.Error
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
 }
