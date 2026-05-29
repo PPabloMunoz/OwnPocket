@@ -39,16 +39,39 @@ OwnPocket/
 │   ├── cmd/server/main.go              # Application entrypoint
 │   ├── internal/
 │   │   ├── config/                     # Configuration & env
+│   │   │   ├── config.go
+│   │   │   └── database.go
 │   │   ├── handler/                    # HTTP handlers (Gin)
+│   │   │   ├── handler.go              # Route registration
+│   │   │   ├── account_handler.go
+│   │   │   ├── auth_handler.go
+│   │   │   ├── budget_handler.go
+│   │   │   ├── category_handler.go
+│   │   │   ├── dashboard_handler.go
+│   │   │   └── transaction_handler.go
 │   │   ├── service/                    # Business logic
+│   │   │   ├── service.go              # Service base/deps
+│   │   │   ├── account_service.go
+│   │   │   ├── auth_service.go
+│   │   │   ├── budget_service.go
+│   │   │   ├── category_service.go
+│   │   │   ├── dashboard_service.go
+│   │   │   └── transaction_service.go
 │   │   ├── model/                      # GORM models + types
+│   │   │   ├── models.go
+│   │   │   └── amount.go              # Custom Amount (int64 cents)
 │   │   ├── middleware/                 # Auth, CORS, etc.
-│   │   └── utils/                      # Shared helpers (responses, etc.)
-│   ├── migrations/                     # SQL migration files
+│   │   │   └── middleware.go
+│   │   └── utils/                      # Shared helpers
+│   │       └── response.go
+│   │
+│   ├── .air.toml                       # Air hot-reload config
+│   ├── .env / .env.example
 │   └── go.mod
 │
 ├── data/                               # Runtime data (gitignore)
 │   └── app.db
+│   └── migrations/
 │
 ├── justfile
 └── README.md
@@ -116,14 +139,16 @@ func (a Amount) ToFloat() float64
 
 2. **Service** (`internal/service/tag_service.go`)
    - Create CRUD methods
+   - Write tests in `tag_service_test.go`
 
 3. **Handler** (`internal/handler/tag_handler.go`)
    - Add routes and handlers
+   - Write tests in `tag_handler_test.go`
 
 4. **Routes** (`internal/handler/handler.go`)
    - Register new routes under protected group
 
-5. **Frontend**
+5. **Frontend** (if applicable)
    - Add types in `src/types/`
    - Create components
    - Add API calls in `api.ts`
@@ -221,7 +246,7 @@ just build-local
 
 ---
 
-**Last Updated:** May 29, 2026 (updated entry point, build system, project structure, JSON response format)
+**Last Updated:** May 29, 2026 (updated entry point, build system, project structure, JSON response format, test file conventions)
 
 You are now a **OwnPocket expert agent**. Follow this document strictly when helping with this codebase.
 
