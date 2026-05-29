@@ -38,7 +38,30 @@ func SetupRoutes(r *gin.RouterGroup, db *gorm.DB, cfg *config.Config) {
 	protected := api.Group("")
 	protected.Use(middleware.AuthMiddleware([]byte(cfg.JWTSecret)))
 
-	protected.GET("/test", h.Health)
+	// Accounts
+	protected.GET("/accounts", h.GetAccounts)
+	protected.POST("/accounts", h.CreateAccount)
+	protected.GET("/accounts/:id", h.GetAccount)
+	protected.PUT("/accounts/:id", h.UpdateAccount)
+	protected.DELETE("/accounts/:id", h.DeleteAccount)
+
+	// Transactions
+	protected.GET("/transactions", h.GetTransactions)
+	protected.POST("/transactions", h.CreateTransaction)
+	protected.GET("/transactions/:id", h.GetTransaction)
+	protected.PUT("/transactions/:id", h.UpdateTransaction)
+	protected.DELETE("/transactions/:id", h.DeleteTransaction)
+
+	// Categories
+	protected.GET("/categories", h.GetCategories)
+	protected.POST("/categories", h.CreateCategory)
+
+	// Budgets
+	protected.GET("/budgets", h.GetBudgets)
+	protected.POST("/budgets", h.CreateBudget)
+
+	// Dashboard / Summary
+	protected.GET("/dashboard/summary", h.GetDashboardSummary)
 }
 
 func (h *Handler) Health(c *gin.Context) {
