@@ -4,16 +4,17 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/ppablomunoz/ownpocket/backend/internal/utils"
 )
 
 func (h *Handler) GetCategories(c *gin.Context) {
 	userID := c.GetUint("user_id")
 	categories, err := h.service.GetCategories(userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Error(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, categories)
+	utils.Success(c, http.StatusOK, categories)
 }
 
 func (h *Handler) CreateCategory(c *gin.Context) {
@@ -26,13 +27,13 @@ func (h *Handler) CreateCategory(c *gin.Context) {
 		Icon     *string `json:"icon"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		utils.Error(c, http.StatusBadRequest, err.Error())
 		return
 	}
 	category, err := h.service.CreateCategory(userID, req.Name, req.Type, req.ParentID, req.Color, req.Icon)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Error(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusCreated, category)
+	utils.Success(c, http.StatusCreated, category)
 }

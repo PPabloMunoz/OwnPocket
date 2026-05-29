@@ -5,16 +5,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/ppablomunoz/ownpocket/backend/internal/model"
+	"github.com/ppablomunoz/ownpocket/backend/internal/utils"
 )
 
 func (h *Handler) GetBudgets(c *gin.Context) {
 	userID := c.GetUint("user_id")
 	budgets, err := h.service.GetBudgets(userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Error(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, budgets)
+	utils.Success(c, http.StatusOK, budgets)
 }
 
 func (h *Handler) CreateBudget(c *gin.Context) {
@@ -25,13 +26,13 @@ func (h *Handler) CreateBudget(c *gin.Context) {
 		Amount     float64 `json:"amount" binding:"required"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		utils.Error(c, http.StatusBadRequest, err.Error())
 		return
 	}
 	budget, err := h.service.CreateBudget(userID, req.CategoryID, req.Period, model.NewAmountFromFloat(req.Amount))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		utils.Error(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusCreated, budget)
+	utils.Success(c, http.StatusCreated, budget)
 }
