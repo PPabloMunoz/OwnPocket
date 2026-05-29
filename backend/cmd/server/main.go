@@ -18,9 +18,6 @@ func main() {
 		log.Fatalf("Failed to connect to database at %s: %v", cfg.DBPath, err)
 	}
 
-	fmt.Println("Successfully connected to data/app.db!")
-	_ = db.Config
-
 	r := gin.Default()
 
 	// Middlewares
