@@ -23,7 +23,7 @@ type Account struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
 	UserID      uint      `gorm:"not null;index" json:"user_id"`
 	Name        string    `gorm:"not null" json:"name"`
-	Type        string    `gorm:"not null;check:type IN ('asset','liability','income','expense')" json:"type"`
+	Type        string    `gorm:"not null;check:type IN ('checking','savings','credit_card','cash','investment','loan')" json:"type"`
 	Balance     Amount    `gorm:"not null;default:0" json:"balance"` // in cents
 	CurrencyID  uint      `gorm:"default:1" json:"currency_id"`
 	Description *string   `json:"description"`
