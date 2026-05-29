@@ -14,7 +14,7 @@ default:
 # Run the backend in development mode (with hot-reloading if air is installed, otherwise standard go run)
 dev-backend:
     @echo "🚀 Starting Go backend..."
-    cd backend && if command -v air >/dev/null 2>&1; then air; else go run cmd/app/main.go; fi
+    cd backend && if command -v air >/dev/null 2>&1; then air; else go run cmd/server/main.go; fi
 
 # Run the frontend development server
 dev-frontend:
@@ -70,7 +70,7 @@ build-frontend:
 # Build the backend binary
 build-backend:
     @echo "🏗️ Building Go backend binary..."
-    cd backend && go build -o ../bin/app cmd/app/main.go
+    cd backend && go build -o ../bin/app cmd/server/main.go
 
 # Build both frontend and backend locally
 build-local: build-frontend build-backend
