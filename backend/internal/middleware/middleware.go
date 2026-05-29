@@ -9,7 +9,7 @@ import (
 )
 
 type Claims struct {
-	Username string `json:"username"`
+	UserID uint `json:"user_id"`
 	jwt.RegisteredClaims
 }
 
@@ -40,7 +40,7 @@ func AuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 		}
 
 		if claims, ok := token.Claims.(*Claims); ok {
-			c.Set("username", claims.Username)
+			c.Set("user_id", claims.UserID)
 			c.Next()
 		}
 	}
