@@ -56,17 +56,39 @@ function DashboardPage() {
         style={{ animationDelay: "100ms" }}
         className="animate-[fadeIn_0.6s_ease_both] grid gap-3 sm:grid-cols-3"
       >
-        {([
-          { label: "Monthly income", value: income, icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-500/10" },
-          { label: "Monthly expenses", value: expenses, icon: TrendingDown, color: "text-rose-500", bg: "bg-rose-500/10" },
-          { label: "Net this month", value: netMonth, icon: PiggyBank, color: netMonth >= 0 ? "text-emerald-500" : "text-rose-500", bg: "bg-zinc-500/10" },
-        ] as const).map((kpi) => (
+        {(
+          [
+            {
+              label: "Monthly income",
+              value: income,
+              icon: TrendingUp,
+              color: "text-emerald-500",
+              bg: "bg-emerald-500/10",
+            },
+            {
+              label: "Monthly expenses",
+              value: expenses,
+              icon: TrendingDown,
+              color: "text-rose-500",
+              bg: "bg-rose-500/10",
+            },
+            {
+              label: "Net this month",
+              value: netMonth,
+              icon: PiggyBank,
+              color: netMonth >= 0 ? "text-emerald-500" : "text-rose-500",
+              bg: "bg-zinc-500/10",
+            },
+          ] as const
+        ).map((kpi) => (
           <div
             key={kpi.label}
             className="rounded-2xl border border-zinc-200 bg-white/80 p-4 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/80"
           >
             <div className="flex items-center gap-3">
-              <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${kpi.bg}`}>
+              <div
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${kpi.bg}`}
+              >
                 <kpi.icon className={`h-4 w-4 ${kpi.color}`} />
               </div>
               <div className="min-w-0">
@@ -98,15 +120,11 @@ function DashboardPage() {
               </h2>
             </div>
             {isLoading ? (
-              <div className="px-5 py-10 text-center text-sm text-zinc-400">
-                Loading...
-              </div>
+              <div className="px-5 py-10 text-center text-sm text-zinc-400">Loading...</div>
             ) : txs.length === 0 ? (
               <div className="flex flex-col items-center gap-2 px-5 py-10 text-center">
                 <ArrowRightLeft className="h-6 w-6 text-zinc-300 dark:text-zinc-600" />
-                <p className="text-sm text-zinc-400 dark:text-zinc-500">
-                  No transactions yet.
-                </p>
+                <p className="text-sm text-zinc-400 dark:text-zinc-500">No transactions yet.</p>
               </div>
             ) : (
               <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -157,10 +175,7 @@ function DashboardPage() {
         </section>
 
         {/* Budget progress */}
-        <section
-          style={{ animationDelay: "300ms" }}
-          className="animate-[fadeIn_0.6s_ease_both]"
-        >
+        <section style={{ animationDelay: "300ms" }} className="animate-[fadeIn_0.6s_ease_both]">
           <div className="rounded-2xl border border-zinc-200 bg-white/80 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/80">
             <div className="border-b border-zinc-200 px-5 py-3.5 dark:border-zinc-800">
               <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
@@ -168,15 +183,11 @@ function DashboardPage() {
               </h2>
             </div>
             {isLoading ? (
-              <div className="px-5 py-10 text-center text-sm text-zinc-400">
-                Loading...
-              </div>
+              <div className="px-5 py-10 text-center text-sm text-zinc-400">Loading...</div>
             ) : budgets.length === 0 ? (
               <div className="flex flex-col items-center gap-2 px-5 py-10 text-center">
                 <PiggyBank className="h-6 w-6 text-zinc-300 dark:text-zinc-600" />
-                <p className="text-sm text-zinc-400 dark:text-zinc-500">
-                  No budgets set.
-                </p>
+                <p className="text-sm text-zinc-400 dark:text-zinc-500">No budgets set.</p>
               </div>
             ) : (
               <div className="space-y-4 px-5 py-4">
@@ -195,9 +206,7 @@ function DashboardPage() {
                         </span>
                         <span
                           className={`tabular-nums ${
-                            over
-                              ? "text-rose-500"
-                              : "text-zinc-500 dark:text-zinc-400"
+                            over ? "text-rose-500" : "text-zinc-500 dark:text-zinc-400"
                           }`}
                         >
                           {formatCents(b.spent)}
@@ -210,11 +219,7 @@ function DashboardPage() {
                       <div className="h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
                         <div
                           className={`h-full rounded-full transition-all duration-700 ${
-                            over
-                              ? "bg-rose-500"
-                              : used > 80
-                                ? "bg-amber-500"
-                                : "bg-emerald-500"
+                            over ? "bg-rose-500" : used > 80 ? "bg-amber-500" : "bg-emerald-500"
                           }`}
                           style={{ width: `${Math.min(used, 100)}%` }}
                         />
