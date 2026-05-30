@@ -1,0 +1,12 @@
+node_modules
+build
+bin
+data
+.git
+.vscode
+.idea
+*.db
+backend/tmp
+backend/vendor
+frontend/node_modules
+frontend/build

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  ownpocket:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ownpocket
+    ports:
+      - "${PORT:-8080}:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PORT=8080
+      - DB_PATH=/app/data/app.db
+      - JWT_SECRET=${JWT_SECRET:-e8a46bd6b8b300bcd0f03a64087b20d856a9d546248ab45458316e08ca66b53f}
+      - GIN_MODE=release
+    restart: unless-stopped

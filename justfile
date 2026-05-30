@@ -75,6 +75,11 @@ build-local: build-frontend build-backend
 # Docker & Deployment
 # ---
 
+# Build the Docker image
+docker-build:
+    @echo "🐳 Building Docker image..."
+    docker build -t ownpocket .
+
 # Spin up the entire stack using Docker Compose
 up:
     @echo "🐋 Starting production containers..."
