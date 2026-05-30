@@ -6,6 +6,30 @@ OwnPocket is a lightweight self-hosted finance manager focused on privacy, speed
 
 ---
 
+## Quick Start
+
+### Running with Docker
+
+```bash
+docker run -p 8080:8080 -v ./data:/data ppablomunoz/ownpocket
+```
+
+### Building from Source
+
+Ensure you have [Go](https://go.dev/) and [Just](https://github.com/casey/just) installed.
+
+1.  **Build the single binary:**
+    ```bash
+    just build-local
+    ```
+2.  **Run the app:**
+    ```bash
+    ./bin/app
+    ```
+3.  **Access the UI:** [http://localhost:8080](http://localhost:8080)
+
+---
+
 ## Features
 
 * Lightweight and fast
