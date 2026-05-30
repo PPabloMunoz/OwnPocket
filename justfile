@@ -71,6 +71,11 @@ build-backend:
 # Build both frontend and backend locally
 build-local: build-frontend build-backend
 
+# Prepare a release (builds everything and shows the binary path)
+release: build-local
+    @echo "✅ Release v0.1.0 ready at ./bin/app"
+    @ls -lh ./bin/app
+
 # ---
 # Docker & Deployment
 # ---
