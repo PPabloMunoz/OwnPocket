@@ -31,6 +31,9 @@ func main() {
 	api := r.Group("/api")
 	handler.SetupRoutes(api, db, cfg)
 
+	// Register frontend routes
+	handler.RegisterFrontend(r)
+
 	log.Printf("Server running on :%d", cfg.Port)
 	if err := r.Run(fmt.Sprintf(":%d", cfg.Port)); err != nil {
 		log.Fatalf("Server failed: %v", err)

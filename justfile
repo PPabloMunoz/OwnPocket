@@ -59,6 +59,9 @@ lint:
 build-frontend:
     @echo "📦 Building frontend production bundles..."
     cd frontend && pnpm run build
+    @echo "🚚 Copying frontend assets to backend..."
+    rm -rf backend/internal/handler/static/*
+    cp -rv frontend/build/client/* backend/internal/handler/static/
 
 # Build the backend binary
 build-backend:
@@ -104,5 +107,6 @@ db-shell:
 clean:
     @echo "🧹 Cleaning up build artifacts..."
     rm -rf bin/
-    rm -rf frontend/dist
+    rm -rf frontend/build
+    rm -rf backend/internal/handler/static/*
     @echo "✨ Clean complete."

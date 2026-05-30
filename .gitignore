@@ -79,6 +79,7 @@ temp/
 coverage.out
 coverage.html
 
-# Optional: If you use Docker
-*.dockerenv
+# Embedded frontend
+backend/internal/handler/static/*
+!backend/internal/handler/static/.gitkeep
 
