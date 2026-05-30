@@ -13,7 +13,7 @@ import { useLogout } from "@/hooks/use-auth";
 import { useThemeStore } from "@/stores/theme-store";
 
 const navItems = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/accounts", label: "Accounts", icon: Wallet },
   { to: "/transactions", label: "Transactions", icon: ArrowLeftRight },
   { to: "/budgets", label: "Budgets", icon: PiggyBank },

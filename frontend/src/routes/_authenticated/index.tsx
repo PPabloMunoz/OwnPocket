@@ -13,7 +13,7 @@ import { queryKeys } from "@/lib/query-keys";
 import { formatCents } from "@/lib/utils";
 import type { DashboardSummary } from "@/types/dashboard";
 
-export const Route = createFileRoute("/_authenticated/dashboard")({
+export const Route = createFileRoute("/_authenticated/")({
   component: DashboardPage,
 });
 

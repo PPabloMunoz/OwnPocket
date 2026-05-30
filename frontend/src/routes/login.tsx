@@ -20,7 +20,7 @@ function LoginPage() {
     e.preventDefault();
     try {
       await login.mutateAsync({ username, password });
-      router.navigate({ to: "/dashboard" });
+      router.navigate({ to: "/" });
     } catch {
       // error displayed in form
     }

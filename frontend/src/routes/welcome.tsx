@@ -16,10 +16,11 @@ import { useThemeStore } from "@/stores/theme-store";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8080/api/v1";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/welcome")({
   beforeLoad: () => {
     if (typeof window !== "undefined" && useAuthStore.getState().token) {
-      throw redirect({ to: "/dashboard" });
+      localStorage.setItem("ownpocket-has-visited", "true");
+      throw redirect({ to: "/" });
     }
   },
   component: Welcome,
