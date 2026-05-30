@@ -1,38 +1,64 @@
-# Stage 1: Build Frontend
-FROM node:22-alpine AS frontend-builder
+# ==========================================
+# STAGE 1: Frontend Dependency Caching
+# ==========================================
+FROM node:26-alpine3.22 AS frontend-deps
 WORKDIR /app/frontend
-COPY frontend/package.json frontend/pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install
+RUN apk add --no-cache libc6-compat
+RUN npm install -g pnpm
+COPY frontend/package.json frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml ./
+RUN pnpm approve-builds esbuild && pnpm install --frozen-lockfile
+
+# ==========================================
+# STAGE 2: Frontend Build
+# ==========================================
+FROM frontend-deps AS frontend-builder
+WORKDIR /app/frontend
 COPY frontend/ ./
 RUN pnpm run build
 
-# Stage 2: Build Backend
-FROM golang:alpine AS backend-builder
+# ==========================================
+# STAGE 3: Backend Dependency Caching
+# ==========================================
+FROM golang:1.26-alpine AS backend-deps
 WORKDIR /app/backend
-# Install build essentials if needed
 RUN apk add --no-cache gcc musl-dev
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download
-COPY backend/ ./
-# Copy built frontend assets from Stage 1
-COPY --from=frontend-builder /app/frontend/build/client ./internal/handler/static
-# Build the binary
-RUN CGO_ENABLED=1 GOOS=linux go build -o /app/bin/app cmd/server/main.go
 
-# Stage 3: Final Image
-FROM alpine:latest
+# ==========================================
+# STAGE 4: Backend Build
+# ==========================================
+FROM backend-deps AS backend-builder
+WORKDIR /app/backend
+# Copy the source code
+COPY backend/ ./
+# Copy built frontend assets *ONLY* at the last possible second
+COPY --from=frontend-builder /app/frontend/build/client ./internal/handler/static
+
+# Leverage Go's compiler cache for CGO builds
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    CGO_ENABLED=1 GOOS=linux go build -ldflags="-s -w" -o /app/bin/app cmd/server/main.go
+
+# ==========================================
+# STAGE 5: Final Production Image
+# ==========================================
+FROM alpine:3.22
 WORKDIR /app
-# Install dependencies for CGO (sqlite)
-RUN apk add --no-cache ca-certificates libc6-compat
-# Copy the binary from the backend-builder
-COPY --from=backend-builder /app/bin/app .
-# Create data directory
-RUN mkdir -p data
-# Set environment variables
+
+# Combine RUN commands to keep layers minimal
+RUN apk add --no-cache ca-certificates libc6-compat && \
+    mkdir -p data && \
+    addgroup -S appgroup && adduser -S appuser -G appgroup && \
+    chown -R appuser:appgroup /app
+
+COPY --from=backend-builder --chown=appuser:appgroup /app/bin/app .
+
+USER appuser
+
 ENV PORT=8080
 ENV DB_PATH="/app/data/app.db"
 ENV GIN_MODE=release
-# Expose the port
+
 EXPOSE 8080
-# Run the application
+
 CMD ["./app"]
