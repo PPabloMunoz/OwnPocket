@@ -20,8 +20,13 @@ func main() {
 
 	r := gin.Default()
 
-	// Middlewares
-	r.Use(cors.Default())
+	// CORS
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		AllowCredentials: true,
+	}))
 
 	api := r.Group("/api")
 	handler.SetupRoutes(api, db, cfg)

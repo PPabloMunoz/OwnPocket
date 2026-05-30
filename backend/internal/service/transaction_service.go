@@ -45,11 +45,33 @@ func (s *Service) GetTransactions(userID uint) ([]model.Transaction, error) {
 		Preload("ToAccount").
 		Preload("Category").
 		Preload("Tags").
-		Order("date DESC").
+		Order("date DESC, id DESC").
 		Find(&txs).Error; err != nil {
 		return nil, err
 	}
 	return txs, nil
+}
+
+func (s *Service) GetTransactionsPaginated(userID uint, page, pageSize int) ([]model.Transaction, int64, error) {
+	var total int64
+	if err := s.db.Model(&model.Transaction{}).Where("user_id = ?", userID).Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var txs []model.Transaction
+	offset := (page - 1) * pageSize
+	if err := s.db.Where("user_id = ?", userID).
+		Preload("Account").
+		Preload("ToAccount").
+		Preload("Category").
+		Preload("Tags").
+		Order("date DESC, id DESC").
+		Offset(offset).
+		Limit(pageSize).
+		Find(&txs).Error; err != nil {
+		return nil, 0, err
+	}
+	return txs, total, nil
 }
 
 func (s *Service) GetTransaction(userID, txID uint) (*model.Transaction, error) {

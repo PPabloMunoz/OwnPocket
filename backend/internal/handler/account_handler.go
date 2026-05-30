@@ -21,10 +21,11 @@ func (h *Handler) GetAccounts(c *gin.Context) {
 func (h *Handler) CreateAccount(c *gin.Context) {
 	userID := c.GetUint("user_id")
 	var req struct {
-		Name        string  `json:"name" binding:"required"`
-		Type        string  `json:"type" binding:"required,oneof=checking savings credit_card cash investment loan"`
-		CurrencyID  uint    `json:"currency_id"`
-		Description *string `json:"description"`
+		Name        string   `json:"name" binding:"required"`
+		Type        string   `json:"type" binding:"required,oneof=checking savings credit_card cash investment loan"`
+		CurrencyID  uint     `json:"currency_id"`
+		Balance     *float64 `json:"balance"`
+		Description *string  `json:"description"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		utils.Error(c, http.StatusBadRequest, err.Error())
@@ -33,7 +34,7 @@ func (h *Handler) CreateAccount(c *gin.Context) {
 	if req.CurrencyID == 0 {
 		req.CurrencyID = 1
 	}
-	account, err := h.service.CreateAccount(userID, req.Name, req.Type, req.CurrencyID, req.Description)
+	account, err := h.service.CreateAccount(userID, req.Name, req.Type, req.CurrencyID, req.Balance, req.Description)
 	if err != nil {
 		utils.Error(c, http.StatusInternalServerError, err.Error())
 		return

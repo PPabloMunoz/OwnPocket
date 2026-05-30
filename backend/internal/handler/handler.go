@@ -55,6 +55,8 @@ func SetupRoutes(r *gin.RouterGroup, db *gorm.DB, cfg *config.Config) {
 	// Categories
 	protected.GET("/categories", h.GetCategories)
 	protected.POST("/categories", h.CreateCategory)
+	protected.PUT("/categories/:id", h.UpdateCategory)
+	protected.DELETE("/categories/:id", h.DeleteCategory)
 
 	// Budgets
 	protected.GET("/budgets", h.GetBudgets)

@@ -12,12 +12,31 @@ import (
 
 func (h *Handler) GetTransactions(c *gin.Context) {
 	userID := c.GetUint("user_id")
-	txs, err := h.service.GetTransactions(userID)
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	pageSize, _ := strconv.Atoi(c.DefaultQuery("page_size", "50"))
+	if page < 1 {
+		page = 1
+	}
+	if pageSize < 1 || pageSize > 200 {
+		pageSize = 50
+	}
+
+	txs, total, err := h.service.GetTransactionsPaginated(userID, page, pageSize)
 	if err != nil {
 		utils.Error(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	utils.Success(c, http.StatusOK, txs)
+	totalPages := int(total) / pageSize
+	if int(total)%pageSize > 0 {
+		totalPages++
+	}
+	utils.Success(c, http.StatusOK, utils.PaginatedData[model.Transaction]{
+		Items:      txs,
+		Total:      total,
+		Page:       page,
+		PageSize:   pageSize,
+		TotalPages: totalPages,
+	})
 }
 
 func (h *Handler) CreateTransaction(c *gin.Context) {

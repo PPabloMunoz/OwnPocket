@@ -9,13 +9,18 @@ func (s *Service) CreateAccount(
 	userID uint,
 	name, accountType string,
 	currencyID uint,
+	balance *float64,
 	description *string,
 ) (*model.Account, error) {
+	initialBalance := model.Amount(0)
+	if balance != nil {
+		initialBalance = model.NewAmountFromFloat(*balance)
+	}
 	account := model.Account{
 		UserID:      userID,
 		Name:        name,
 		Type:        accountType,
-		Balance:     0,
+		Balance:     initialBalance,
 		CurrencyID:  currencyID,
 		Description: description,
 		IsActive:    true,
