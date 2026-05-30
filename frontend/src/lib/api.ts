@@ -13,10 +13,7 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {},
-): Promise<T> {
+async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = useAuthStore.getState().token;
 
   const headers: Record<string, string> = {
@@ -39,6 +36,10 @@ async function request<T>(
   if (response.status === 401) {
     useAuthStore.getState().logout();
     throw new ApiError(401, "Unauthorized");
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   const json: ApiResponse<T> = await response.json();

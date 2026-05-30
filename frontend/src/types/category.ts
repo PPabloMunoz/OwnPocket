@@ -13,7 +13,7 @@ export interface Category {
 export interface CreateCategoryRequest {
   name: string;
   type: Category["type"];
-  parent_id?: number;
+  parent_id?: number | null;
   color?: string;
   icon?: string;
 }

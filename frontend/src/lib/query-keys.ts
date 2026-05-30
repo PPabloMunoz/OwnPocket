@@ -8,6 +8,8 @@ export const queryKeys = {
   },
   transactions: {
     all: ["transactions"] as const,
+    paginated: (page: number, pageSize: number) =>
+      ["transactions", "paginated", page, pageSize] as const,
     detail: (id: number) => ["transactions", id] as const,
   },
   categories: {

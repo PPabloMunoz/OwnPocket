@@ -36,12 +36,8 @@ function Setup() {
           <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900">
             <Wallet className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Set up OwnPocket
-          </h1>
-          <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-            Follow the steps to get started.
-          </p>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Set up OwnPocket</h1>
+          <p className="mt-1 text-zinc-600 dark:text-zinc-400">Follow the steps to get started.</p>
         </div>
 
         <div className="space-y-4">

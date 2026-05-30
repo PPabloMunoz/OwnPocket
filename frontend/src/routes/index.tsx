@@ -1,7 +1,16 @@
 import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/stores/auth-store";
-import { Wallet, ArrowRight, Database, CheckCircle2, XCircle, Loader2, Sun, Moon } from "lucide-react";
+import {
+  Wallet,
+  ArrowRight,
+  Database,
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  Sun,
+  Moon,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { useThemeStore } from "@/stores/theme-store";
 
@@ -34,12 +43,12 @@ function Welcome() {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20 dark:bg-[linear-gradient(to_right,#27272a_1px,transparent_1px),linear-gradient(to_bottom,#27272a_1px,transparent_1px)]" />
 
       <button
-          type="button"
-          onClick={toggleTheme}
-          className="fixed right-5 top-5 z-50 flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
-        >
-          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        </button>
+        type="button"
+        onClick={toggleTheme}
+        className="fixed right-5 top-5 z-50 flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
+      >
+        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      </button>
 
       <div className="relative w-full max-w-lg rounded-2xl border border-zinc-200 bg-white/80 p-8 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/80">
         <div className="flex flex-col items-center text-center">
@@ -74,7 +83,11 @@ function Welcome() {
               <Database className="h-4 w-4 text-zinc-400" />
               SQLite Database
               <span className="text-zinc-400 dark:text-zinc-500">
-                {status === "loading" ? "Connecting..." : status === "online" ? "Connected" : "Disconnected"}
+                {status === "loading"
+                  ? "Connecting..."
+                  : status === "online"
+                    ? "Connected"
+                    : "Disconnected"}
               </span>
             </li>
           </ul>
@@ -87,8 +100,6 @@ function Welcome() {
               <ArrowRight className="h-4 w-4 opacity-70" />
             </Button>
           </Link>
-
-
         </div>
       </div>
     </div>

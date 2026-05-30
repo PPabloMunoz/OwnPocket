@@ -4,3 +4,8 @@ export type { Account, CreateAccountRequest, UpdateAccountRequest, Currency } fr
 export type { Category, CreateCategoryRequest } from "./category";
 export type { Transaction, CreateTransactionRequest, Tag } from "./transaction";
 export type { Budget, CreateBudgetRequest } from "./budget";
+export type {
+  DashboardSummary,
+  CategorySummaryItem,
+  BudgetWithSpent,
+} from "./dashboard";

@@ -9,8 +9,7 @@ export function useLogin() {
   const setAuth = useAuthStore((s) => s.setAuth);
 
   return useMutation({
-    mutationFn: (data: LoginRequest) =>
-      api.post<AuthResponse>("/auth/login", data),
+    mutationFn: (data: LoginRequest) => api.post<AuthResponse>("/auth/login", data),
     onSuccess: (result) => {
       setAuth(result.token, result.user);
     },
@@ -21,8 +20,7 @@ export function useRegister() {
   const setAuth = useAuthStore((s) => s.setAuth);
 
   return useMutation({
-    mutationFn: (data: RegisterRequest) =>
-      api.post<AuthResponse>("/auth/register", data),
+    mutationFn: (data: RegisterRequest) => api.post<AuthResponse>("/auth/register", data),
     onSuccess: (result) => {
       setAuth(result.token, result.user);
     },
