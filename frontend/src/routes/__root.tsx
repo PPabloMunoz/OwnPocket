@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
@@ -5,6 +6,8 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 
 import appCss from "../styles.css?url";
+
+import { useThemeStore } from "@/stores/theme-store";
 
 import type { QueryClient } from "@tanstack/react-query";
 
@@ -23,7 +26,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "OwnPocket",
+      },
+      {
+        name: "description",
+        content: "Personal finance manager",
       },
     ],
     links: [
@@ -37,8 +44,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const theme = useThemeStore((s) => s.theme);
+  const [transitioning, setTransitioning] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setTransitioning(true));
+  }, []);
+
   return (
-    <html lang="en">
+    <html lang="en" data-theme={theme} className={transitioning ? "theme-transition" : ""}>
       <head>
         <HeadContent />
       </head>
