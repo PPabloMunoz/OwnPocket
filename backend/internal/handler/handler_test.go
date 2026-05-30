@@ -6,12 +6,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/ppablomunoz/ownpocket/backend/internal/config"
-	"github.com/ppablomunoz/ownpocket/backend/internal/middleware"
 	"github.com/ppablomunoz/ownpocket/backend/internal/model"
 	"github.com/ppablomunoz/ownpocket/backend/internal/service"
 	"github.com/stretchr/testify/require"
@@ -111,61 +108,6 @@ func setupTestRouter(t *testing.T) (*gin.Engine, *Handler, *gorm.DB) {
 	return r, h, db
 }
 
-func setupTestRouterWithAuth(t *testing.T) (*gin.Engine, *Handler, *gorm.DB) {
-	t.Helper()
-	gin.SetMode(gin.TestMode)
-	db := setupTestDB(t)
-
-	cfg := &config.Config{JWTSecret: "test-secret"}
-	h := NewHandler(db, cfg)
-	svc := service.NewService(db)
-	h.service = svc
-
-	r := gin.New()
-	r.Use(gin.Recovery())
-	v1 := r.Group("/api/v1")
-
-	v1.GET("/health", h.Health)
-	v1.POST("/auth/register", h.Register)
-	v1.POST("/auth/login", h.Login)
-
-	protected := v1.Group("")
-	protected.Use(middleware.AuthMiddleware([]byte(cfg.JWTSecret)))
-
-	protected.GET("/accounts", h.GetAccounts)
-	protected.POST("/accounts", h.CreateAccount)
-	protected.GET("/accounts/:id", h.GetAccount)
-	protected.PUT("/accounts/:id", h.UpdateAccount)
-	protected.DELETE("/accounts/:id", h.DeleteAccount)
-
-	protected.GET("/transactions", h.GetTransactions)
-	protected.POST("/transactions", h.CreateTransaction)
-	protected.GET("/transactions/:id", h.GetTransaction)
-	protected.PUT("/transactions/:id", h.UpdateTransaction)
-	protected.DELETE("/transactions/:id", h.DeleteTransaction)
-
-	protected.GET("/categories", h.GetCategories)
-	protected.POST("/categories", h.CreateCategory)
-
-	protected.GET("/budgets", h.GetBudgets)
-	protected.POST("/budgets", h.CreateBudget)
-
-	protected.GET("/dashboard/summary", h.GetDashboardSummary)
-
-	return r, h, db
-}
-
-func generateToken(t *testing.T, secret string, userID uint) string {
-	t.Helper()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": userID,
-		"exp":     time.Now().Add(1 * time.Hour).Unix(),
-	})
-	s, err := token.SignedString([]byte(secret))
-	require.NoError(t, err)
-	return s
-}
-
 func executeRequest(r *gin.Engine, method, url string, body any) *httptest.ResponseRecorder {
 	var reqBody *bytes.Buffer
 	if body != nil {
@@ -177,23 +119,6 @@ func executeRequest(r *gin.Engine, method, url string, body any) *httptest.Respo
 
 	req, _ := http.NewRequest(method, url, reqBody)
 	req.Header.Set("Content-Type", "application/json")
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	return w
-}
-
-func executeAuthenticatedRequest(r *gin.Engine, method, url, token string, body any) *httptest.ResponseRecorder {
-	var reqBody *bytes.Buffer
-	if body != nil {
-		b, _ := json.Marshal(body)
-		reqBody = bytes.NewBuffer(b)
-	} else {
-		reqBody = bytes.NewBuffer(nil)
-	}
-
-	req, _ := http.NewRequest(method, url, reqBody)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+token)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w

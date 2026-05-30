@@ -13,7 +13,7 @@ func TestCreateAccount_Success(t *testing.T) {
 	userID := createTestUser(t, db)
 
 	desc := "My main account"
-	account, err := svc.CreateAccount(userID, "Checking", "checking", 1, &desc)
+	account, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil, &desc)
 	require.NoError(t, err)
 	assert.NotZero(t, account.ID)
 	assert.Equal(t, userID, account.UserID)
@@ -27,7 +27,7 @@ func TestCreateAccount_DefaultCurrency(t *testing.T) {
 	svc, db := setupService(t)
 	userID := createTestUser(t, db)
 
-	account, err := svc.CreateAccount(userID, "Savings", "savings", 1, nil)
+	account, err := svc.CreateAccount(userID, "Savings", "savings", 1, nil, nil)
 	require.NoError(t, err)
 	assert.NotZero(t, account.ID)
 	assert.Equal(t, uint(1), account.CurrencyID)
@@ -37,9 +37,9 @@ func TestGetAccounts(t *testing.T) {
 	svc, db := setupService(t)
 	userID := createTestUser(t, db)
 
-	_, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil)
+	_, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
-	_, err = svc.CreateAccount(userID, "Savings", "savings", 1, nil)
+	_, err = svc.CreateAccount(userID, "Savings", "savings", 1, nil, nil)
 	require.NoError(t, err)
 
 	accounts, err := svc.GetAccounts(userID)
@@ -52,7 +52,7 @@ func TestGetAccounts_OtherUser(t *testing.T) {
 	userID1 := createTestUser(t, db)
 	userID2 := createTestUserWithName(t, db, "other")
 
-	_, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil)
+	_, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	accounts, err := svc.GetAccounts(userID2)
@@ -64,7 +64,7 @@ func TestGetAccount_Success(t *testing.T) {
 	svc, db := setupService(t)
 	userID := createTestUser(t, db)
 
-	created, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil)
+	created, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	account, err := svc.GetAccount(userID, created.ID)
@@ -86,7 +86,7 @@ func TestGetAccount_OtherUser(t *testing.T) {
 	userID1 := createTestUser(t, db)
 	userID2 := createTestUserWithName(t, db, "other")
 
-	created, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil)
+	created, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	_, err = svc.GetAccount(userID2, created.ID)
@@ -97,7 +97,7 @@ func TestUpdateAccount(t *testing.T) {
 	svc, db := setupService(t)
 	userID := createTestUser(t, db)
 
-	created, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil)
+	created, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	updated, err := svc.UpdateAccount(userID, created.ID, map[string]any{"name": "Premium Checking"})
@@ -117,7 +117,7 @@ func TestDeleteAccount(t *testing.T) {
 	svc, db := setupService(t)
 	userID := createTestUser(t, db)
 
-	created, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil)
+	created, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	err = svc.DeleteAccount(userID, created.ID)
@@ -132,7 +132,7 @@ func TestDeleteAccount_OtherUser(t *testing.T) {
 	userID1 := createTestUser(t, db)
 	userID2 := createTestUserWithName(t, db, "other")
 
-	created, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil)
+	created, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	err = svc.DeleteAccount(userID2, created.ID)

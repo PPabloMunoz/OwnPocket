@@ -27,7 +27,7 @@ func TestGetDashboardSummary_WithData(t *testing.T) {
 	svc, db := setupService(t)
 	userID := createTestUser(t, db)
 
-	account, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil)
+	account, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	invCategory, err := svc.CreateCategory(userID, "Salary", "income", nil, nil, nil)

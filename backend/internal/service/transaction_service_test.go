@@ -14,10 +14,10 @@ func setupTransactionTest(t *testing.T) (*Service, uint, uint, uint) {
 	svc, db := setupService(t)
 	userID := createTestUser(t, db)
 
-	account1, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil)
+	account1, err := svc.CreateAccount(userID, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
-	account2, err := svc.CreateAccount(userID, "Savings", "savings", 1, nil)
+	account2, err := svc.CreateAccount(userID, "Savings", "savings", 1, nil, nil)
 	require.NoError(t, err)
 
 	return svc, userID, account1.ID, account2.ID
@@ -112,7 +112,7 @@ func TestGetTransactions_ScopedByUser(t *testing.T) {
 	userID2 := createTestUserWithName(t, db, "other")
 	date := time.Date(2026, 6, 15, 0, 0, 0, 0, time.UTC)
 
-	account1, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil)
+	account1, err := svc.CreateAccount(userID1, "Checking", "checking", 1, nil, nil)
 	require.NoError(t, err)
 
 	_, err = svc.CreateTransaction(userID1, account1.ID, model.NewAmountFromFloat(100.00), "income", date, "Salary", nil, nil, nil)

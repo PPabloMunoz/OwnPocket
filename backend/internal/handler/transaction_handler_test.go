@@ -146,7 +146,8 @@ func TestGetTransactions(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	resp := parseResponse(t, w)
-	txs := resp["data"].([]any)
+	data := resp["data"].(map[string]any)
+	txs := data["items"].([]any)
 	assert.Len(t, txs, 1)
 }
 

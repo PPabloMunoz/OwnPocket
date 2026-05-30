@@ -32,5 +32,7 @@ func main() {
 	handler.SetupRoutes(api, db, cfg)
 
 	log.Printf("Server running on :%d", cfg.Port)
-	r.Run(fmt.Sprintf(":%d", cfg.Port))
+	if err := r.Run(fmt.Sprintf(":%d", cfg.Port)); err != nil {
+		log.Fatalf("Server failed: %v", err)
+	}
 }
