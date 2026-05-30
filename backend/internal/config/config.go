@@ -10,9 +10,8 @@ import (
 )
 
 const (
-	DEFAULT_PORT       = 8080
-	DEFAULT_DB_PATH    = "../data/app.db"
-	DEFAULT_JWT_SECRET = "e8a46bd6b8b300bcd0f03a64087b20d856a9d546248ab45458316e08ca66b53f"
+	DEFAULT_PORT    = 8080
+	DEFAULT_DB_PATH = "../data/app.db"
 )
 
 // Config holds all the configuration for the application
@@ -30,10 +29,15 @@ func LoadConfig() *Config {
 		log.Println("No .env file found, using system environment variables")
 	}
 
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("FATAL: JWT_SECRET environment variable is required but not set. Please provide a secure secret (e.g., run 'openssl rand -hex 32' to generate one).")
+	}
+
 	return &Config{
 		Port:      getEnvAsInt("PORT", DEFAULT_PORT),
 		DBPath:    getEnv("DB_PATH", DEFAULT_DB_PATH),
-		JWTSecret: getEnv("JWT_SECRET", DEFAULT_JWT_SECRET),
+		JWTSecret: jwtSecret,
 	}
 }
 

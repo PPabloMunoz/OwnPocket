@@ -14,7 +14,7 @@ func TestLoadConfigDefaults(t *testing.T) {
 	savedJWT := os.Getenv("JWT_SECRET")
 	os.Unsetenv("PORT")
 	os.Unsetenv("DB_PATH")
-	os.Unsetenv("JWT_SECRET")
+	os.Setenv("JWT_SECRET", "test-secret")
 	defer func() {
 		os.Setenv("PORT", savedPort)
 		os.Setenv("DB_PATH", savedDBPath)
@@ -25,7 +25,7 @@ func TestLoadConfigDefaults(t *testing.T) {
 
 	assert.Equal(t, DEFAULT_PORT, cfg.Port)
 	assert.Equal(t, DEFAULT_DB_PATH, cfg.DBPath)
-	assert.Equal(t, DEFAULT_JWT_SECRET, cfg.JWTSecret)
+	assert.Equal(t, "test-secret", cfg.JWTSecret)
 }
 
 func TestLoadConfigWithEnv(t *testing.T) {
