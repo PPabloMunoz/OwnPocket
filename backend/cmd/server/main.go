@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -10,8 +12,20 @@ import (
 	"github.com/ppablomunoz/ownpocket/backend/internal/handler"
 )
 
+const Version = "0.1.0"
+
 func main() {
+	log.Printf("Starting OwnPocket v%s", Version)
 	cfg := config.LoadConfig()
+
+	// Ensure the database directory exists
+	dbDir := filepath.Dir(cfg.DBPath)
+	if _, err := os.Stat(dbDir); os.IsNotExist(err) {
+		log.Printf("Creating database directory: %s", dbDir)
+		if err := os.MkdirAll(dbDir, 0755); err != nil {
+			log.Fatalf("Failed to create database directory: %v", err)
+		}
+	}
 
 	db, err := config.NewDatabase(cfg.DBPath)
 	if err != nil {
