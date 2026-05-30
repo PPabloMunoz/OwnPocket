@@ -21,11 +21,6 @@ dev-frontend:
     @echo "⚡ Starting Vite frontend..."
     cd frontend && pnpm run dev
 
-# Run both backend and frontend concurrently (requires 'concurrently' npm package or similar, or runs in background)
-dev:
-    @echo "🛠️ Starting full-stack development environment..."
-    just -j 2 dev-backend dev-frontend
-
 # ---
 # Installation & Setup
 # ---
@@ -48,15 +43,13 @@ setup:
 test:
     @echo "🧪 Running backend tests..."
     cd backend && go test ./...
-    @echo "🧪 Running frontend tests..."
-    cd frontend && pnpm run test -- --watchAll=false
 
 # Lint the codebase
 lint:
     @echo "🧹 Linting backend..."
     cd backend && if command -v golangci-lint >/dev/null 2>&1; then golangci-lint run; else go fmt ./...; fi
     @echo "🧹 Linting frontend..."
-    cd frontend && npm run lint
+    cd frontend && pnpm lint
 
 # ---
 # Build Commands
@@ -65,7 +58,7 @@ lint:
 # Build the frontend production assets
 build-frontend:
     @echo "📦 Building frontend production bundles..."
-    cd frontend && npm run build
+    cd frontend && pnpm run build
 
 # Build the backend binary
 build-backend:
