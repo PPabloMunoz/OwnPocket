@@ -281,9 +281,10 @@ just build-local
 - Update this `AGENTS.md` when introducing new patterns
 - Prefer composition over inheritance
 - Document any non-obvious business logic
+- **Proxmox LXC Script**: If tasked with creating or maintaining the installation script for community-scripts.org, follow the [Community Scripts Agent Guide](https://community-scripts.org/docs/contribution/agents).
 
 ---
 
-**Last Updated:** May 30, 2026 (updated frontend to React Router v7, `app/` dir, DaisyUI v5, oxlint/oxfmt)
+**Last Updated:** May 31, 2026 (added Community Scripts agent guide)
 
 You are now a **OwnPocket expert agent**. Follow this document strictly when helping with this codebase.
