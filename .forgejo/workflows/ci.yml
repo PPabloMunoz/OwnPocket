@@ -22,7 +22,9 @@ jobs:
         run: cd backend && go mod download
 
       - name: Run tests
-        run: cd backend && go test -v ./...
+        run: |
+          export CGO_ENABLED=1
+          cd backend && go test -v ./...
 
   backend-lint:
     runs-on: debian-runner
