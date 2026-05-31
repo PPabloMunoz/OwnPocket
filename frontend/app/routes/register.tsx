@@ -1,0 +1,99 @@
+import { useState, type FormEvent } from "react";
+import { useNavigate, Link } from "react-router";
+import { useRegister } from "@/hooks/use-auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useThemeStore } from "@/stores/theme-store";
+import { Wallet, ArrowRight, Sun, Moon } from "lucide-react";
+
+export function meta() {
+  return [{ title: "OwnPocket - Create Account" }];
+}
+
+export default function RegisterPage() {
+  const navigate = useNavigate();
+  const register = useRegister();
+  const theme = useThemeStore((s) => s.theme);
+  const toggleTheme = useThemeStore((s) => s.toggleTheme);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      await register.mutateAsync({ username, password, email: email || undefined });
+      navigate("/");
+    } catch {
+      // error displayed in form
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-950">
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className="fixed right-5 top-5 z-50 flex h-9 w-9 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-500 shadow-sm transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-200"
+      >
+        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      </button>
+
+      <div className="relative w-full max-w-sm rounded-2xl border border-zinc-200 bg-white/80 p-8 shadow-sm backdrop-blur-xl dark:border-zinc-800 dark:bg-zinc-900/80">
+        <div className="mb-6 flex flex-col items-center text-center">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-900 text-white shadow-inner dark:bg-zinc-100 dark:text-zinc-900">
+            <Wallet className="h-6 w-6" />
+          </div>
+          <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
+            Create your account
+          </h1>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <Input
+            label="Username *"
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <Input
+            label="Email (optional)"
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="Password *"
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {register.error && (
+            <p className="text-sm text-red-600 dark:text-red-400">
+              {register.error instanceof Error ? register.error.message : "Registration failed"}
+            </p>
+          )}
+          <Button type="submit" className="w-full justify-between" disabled={register.isPending}>
+            {register.isPending ? "Creating account..." : "Create account"}
+            <ArrowRight className="h-4 w-4 opacity-70" />
+          </Button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-zinc-900 underline underline-offset-2 hover:text-zinc-700 dark:text-zinc-300 dark:hover:text-zinc-100"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}

@@ -17,7 +17,7 @@ vendor/
 # Binary output
 *.bin
 main
-app
+bin/
 finance-app
 *.test
 
