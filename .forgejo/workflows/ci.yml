@@ -31,13 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.26'
-
       - name: golangci-lint
-        uses: golangci-lint/golangci-lint-action@v6
+        uses: https://github.com/golangci/golangci-lint-action@v6
         with:
           version: latest
           working-directory: backend
@@ -55,12 +50,12 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 'latest'
           cache: 'pnpm'
           cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install dependencies
-        run: cd frontend && pnpm install
+        run: cd frontend && pnpm install --no-frozen-lockfile
 
       - name: Lint
         run: cd frontend && pnpm run lint
@@ -73,4 +68,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker image
-        run: docker build -t ownpocket .
+        run: docker build --no-cache -t ownpocket .
+
