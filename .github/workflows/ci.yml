@@ -33,15 +33,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          go-version: stable
+          go-version: '1.26'
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
           working-directory: backend
+          install-mode: goget
 
   frontend:
     runs-on: ubuntu-latest
