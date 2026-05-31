@@ -67,7 +67,10 @@ jobs:
         run: cd frontend && pnpm run lint
 
       - name: Typecheck
-        run: cd frontend && pnpm run typecheck
+        run: |
+          cd frontend
+          pnpm exec react-router typegen
+          pnpm exec tsc
 
   docker-build:
     runs-on: debian-runner
