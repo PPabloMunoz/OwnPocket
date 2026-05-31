@@ -25,7 +25,7 @@ jobs:
         run: cd backend && go test -v ./...
 
   backend-lint:
-    runs-on: ubuntu-latest
+    runs-on: debian-runner
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +41,7 @@ jobs:
           working-directory: backend
 
   frontend:
-    runs-on: ubuntu-latest
+    runs-on: debian-runner
     steps:
       - uses: actions/checkout@v4
 
@@ -67,7 +67,7 @@ jobs:
         run: cd frontend && pnpm run typecheck
 
   docker-build:
-    runs-on: ubuntu-latest
+    runs-on: debian-runner
     steps:
       - uses: actions/checkout@v4
       - name: Build Docker image
