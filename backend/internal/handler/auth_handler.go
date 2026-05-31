@@ -9,9 +9,9 @@ import (
 
 func (h *Handler) Register(c *gin.Context) {
 	var req struct {
-		Username string `json:"username" binding:"required"`
-		Password string `json:"password" binding:"required,min=6"`
-		Email    string `json:"email"`
+		Username string  `json:"username" binding:"required"`
+		Password string  `json:"password" binding:"required,min=6"`
+		Email    *string `json:"email"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {

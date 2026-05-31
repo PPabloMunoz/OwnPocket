@@ -12,7 +12,8 @@ import (
 func TestRegisterUser_Success(t *testing.T) {
 	svc, db := setupService(t)
 
-	err := svc.RegisterUser("testuser", "password123", "test@example.com")
+	email := "test@example.com"
+	err := svc.RegisterUser("testuser", "password123", &email)
 	require.NoError(t, err)
 
 	var user model.User
@@ -25,20 +26,48 @@ func TestRegisterUser_Success(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestRegisterUser_NoEmail(t *testing.T) {
+	svc, db := setupService(t)
+
+	err := svc.RegisterUser("testuser", "password123", nil)
+	require.NoError(t, err)
+
+	var user model.User
+	err = db.Where("username = ?", "testuser").First(&user).Error
+	require.NoError(t, err)
+	assert.Nil(t, user.Email)
+}
+
+func TestRegisterUser_EmptyEmail(t *testing.T) {
+	svc, db := setupService(t)
+
+	email := ""
+	err := svc.RegisterUser("testuser", "password123", &email)
+	require.NoError(t, err)
+
+	var user model.User
+	err = db.Where("username = ?", "testuser").First(&user).Error
+	require.NoError(t, err)
+	assert.Nil(t, user.Email)
+}
+
 func TestRegisterUser_DuplicateUsername(t *testing.T) {
 	svc, _ := setupService(t)
 
-	err := svc.RegisterUser("testuser", "password123", "test@example.com")
+	email := "test@example.com"
+	err := svc.RegisterUser("testuser", "password123", &email)
 	require.NoError(t, err)
 
-	err = svc.RegisterUser("testuser", "otherpass", "other@example.com")
+	otherEmail := "other@example.com"
+	err = svc.RegisterUser("testuser", "otherpass", &otherEmail)
 	assert.Error(t, err)
 }
 
 func TestLogin_Success(t *testing.T) {
 	svc, _ := setupService(t)
 
-	err := svc.RegisterUser("testuser", "password123", "test@example.com")
+	email := "test@example.com"
+	err := svc.RegisterUser("testuser", "password123", &email)
 	require.NoError(t, err)
 
 	token, err := svc.Login("testuser", "password123", "test-secret")
@@ -49,7 +78,8 @@ func TestLogin_Success(t *testing.T) {
 func TestLogin_InvalidPassword(t *testing.T) {
 	svc, _ := setupService(t)
 
-	err := svc.RegisterUser("testuser", "password123", "test@example.com")
+	email := "test@example.com"
+	err := svc.RegisterUser("testuser", "password123", &email)
 	require.NoError(t, err)
 
 	token, err := svc.Login("testuser", "wrongpass", "test-secret")

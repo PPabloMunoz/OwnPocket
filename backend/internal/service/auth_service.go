@@ -10,16 +10,21 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *Service) RegisterUser(username, password, email string) error {
+func (s *Service) RegisterUser(username, password string, email *string) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
 
+	// If email is empty string, set it to nil
+	if email != nil && *email == "" {
+		email = nil
+	}
+
 	user := model.User{
 		Username:     username,
 		PasswordHash: string(hashedPassword),
-		Email:        &email,
+		Email:        email,
 	}
 
 	return s.db.Transaction(func(tx *gorm.DB) error {
