@@ -41,7 +41,7 @@ func RegisterFrontend(r *gin.Engine) {
 		f, err := staticFS.Open(cleanPath)
 		if err == nil {
 			stat, err := f.Stat()
-			f.Close()
+			_ = f.Close()
 			if err == nil && !stat.IsDir() {
 				fileServer.ServeHTTP(c.Writer, c.Request)
 				return
