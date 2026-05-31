@@ -46,6 +46,7 @@ OwnPocket/
 │   │   │   └── database.go
 │   │   ├── handler/                    # HTTP handlers (Gin)
 │   │   │   ├── handler.go              # Route registration
+│   │   │   ├── frontend.go             # Embedded frontend handler
 │   │   │   ├── account_handler.go
 │   │   │   ├── auth_handler.go
 │   │   │   ├── budget_handler.go
@@ -87,6 +88,7 @@ OwnPocket/
 │   │   └── routes/                    # Route page components (flat)
 │   │       ├── _authenticated.tsx     # Protected layout
 │   │       ├── login.tsx
+│   │       ├── register.tsx
 │   │       ├── setup.tsx              # Setup wizard
 │   │       ├── welcome.tsx            # Welcome splash
 │   │       ├── dashboard.tsx
@@ -102,9 +104,19 @@ OwnPocket/
 │
 ├── data/                               # Runtime data (gitignore)
 │   ├── app.db
+│   ├── test_data.sql                  # Sample data for development
 │   └── migrations/
 │
+├── proxmox/                            # Proxmox LXC installation scripts
+│   ├── ct/                             # Container scripts
+│   └── install/                        # Installation scripts
+│
+├── bin/                                # Compiled binaries
+│   └── app                            # Single executable
 ├── justfile
+├── Dockerfile
+├── docker-compose.yml
+├── LICENSE.md
 └── README.md
 ```
 
