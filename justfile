@@ -73,7 +73,7 @@ build-local: build-frontend build-backend
 
 # Prepare a release (builds everything and shows the binary path)
 release: build-local
-    @echo "✅ Release v0.1.0 ready at ./bin/app"
+    @echo "✅ Release ready at ./bin/app"
     @ls -lh ./bin/app
 
 # ---
@@ -104,6 +104,13 @@ restart:
 # View real-time logs from Docker containers
 logs:
     docker-compose logs -f
+
+# Create a new git tag and push it (triggers the release workflow)
+tag version:
+    @echo "🏷️ Creating tag {{version}}..."
+    git tag -a {{version}} -m "Release {{version}}"
+    git push origin {{version}}
+    @echo "🚀 Tag pushed! The release workflow should start shortly on GitHub."
 
 # ---
 # Database Utilities
