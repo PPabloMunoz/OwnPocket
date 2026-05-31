@@ -12,10 +12,10 @@ import (
 	"github.com/ppablomunoz/ownpocket/backend/internal/handler"
 )
 
-const Version = "0.1.0"
+var Version = "0.0.0-dev"
 
 func main() {
-	log.Printf("Starting OwnPocket v%s", Version)
+	log.Printf("Starting OwnPocket %s", Version)
 	cfg := config.LoadConfig()
 
 	// Ensure the database directory exists
